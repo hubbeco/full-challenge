@@ -1,35 +1,58 @@
-# Backend challenge :clipboard:
+# API Teste:
 
-> Candidato a contratação deve fazer um fork do repositório e fazer sua implementação de micro serviço.
+## Requisitos para o uso da API:
 
-## Requisitos da API :paperclip:
-
-Implemente uma microserviço para um formulário de contato que replique o email para o usuário e a empresa que esteja utilizando o serviço:
-
- * Deve possuir um `Procfile` (heroku) ou `Dockerfile` para executar em produção.
- * Re-escreva a `README.md` com instruções de uso para o projeto.
- * Ofereça suporte para [ReCaptcha v2](https://developers.google.com/recaptcha/docs/display) e/ou [HCaptcha](https://www.hcaptcha.com/).
+  * É necessário possuir a API reCAPTCHA configurada
+     * Possuir a secret key
+  * Java 21
+  * Gmail com segurança de dois fatores ativada, para criar a senha de app no seu gmail
 
 ### Variaveis de ambiente
 
-```env
-PORT = <80>
-ORIGINS = <https://example.com>
-RECAPTCHA_KEY = <secret key api recaptcha>
-RECAPTCHA_URL = <https://www.google.com/recaptcha/api/siteverify>
-MAIL_HOST = <mail.example.com>
-MAIL_PORT = <586>
-MAIL_SECURE = <false>
-MAIL_AUTH_USER = <staff@example.com>
-MAIL_AUTH_PASS = <12435678>
-TEXT_MAIL_TITLE = <Contact form>
-TEXT_MAIL_BODY = <contact from {name}, using mail: {email}, about: {comment}>
-TEXT_MAIL_HTML = <contact from {name}, using mail: {email}, about: {comment}>
+  * É necessário configurar as váriaveis de ambiente
+
+```yaml
+server:
+  port: 80
+
+cors:
+  originsPatterns: http://localhost:8080
+
+spring:
+  application:
+    name: ApiTest
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: email
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
+recaptcha:
+  key: secret key
+  url: https://www.google.com/recaptcha/api/siteverify
+
+text:
+  mail:
+    title: Contact form
+    body: "contact from {name}, using mail: {email}, about: {comment}"
+    html: "contact from {name}, using mail: {email}, about: {comment}"
 ```
 
-### Funcionamento
+### Documentação
 
-#### Envio correto:
+  * OpenAPI: http://localhost/swagger-ui/index.html
+
+
+### endpoint
+
+  * http://localhost:80/form
+
+### Envio correto:
 
  * request
 
@@ -42,9 +65,7 @@ TEXT_MAIL_HTML = <contact from {name}, using mail: {email}, about: {comment}>
 }
 ```
 
- * response:
-
-O código do status deve ser **201** para envio correto. Não é necessário responder qualquer coisa em body.
+ * response: **201**
 
 #### Erro de captcha:
 
@@ -59,10 +80,7 @@ O código do status deve ser **201** para envio correto. Não é necessário res
 }
 ```
 
- * response
-
-O código do status deve ser **401**, retornar um json conforme a [RFC7807](https://datatracker.ietf.org/doc/html/rfc7807).
-<!-- diferencial rfc9457, mais atualizada, porém mais extensa a explicação. -->
+ * response: **401**
 
 ```json
 {
@@ -86,9 +104,7 @@ O código do status deve ser **401**, retornar um json conforme a [RFC7807](http
 }
 ```
 
- * response
-
-O código do status deve ser **400**, retornar um json conforme a [RFC7807](https://datatracker.ietf.org/doc/html/rfc7807).
+ * response: **400**
 
 ```json
 {
@@ -112,9 +128,7 @@ O código do status deve ser **400**, retornar um json conforme a [RFC7807](http
 }
 ```
 
- * response
-
-O código do status deve ser **400**, retornar um json conforme a [RFC7807](https://datatracker.ietf.org/doc/html/rfc7807).
+ * response: **400**
 
 ```json
 {
@@ -127,9 +141,7 @@ O código do status deve ser **400**, retornar um json conforme a [RFC7807](http
 
 #### Erro do servidor:
 
- * response
-
-O código do status deve ser **500**, retornar um json conforme a [RFC7807](https://datatracker.ietf.org/doc/html/rfc7807).
+ * response: **500**
 
 ```json
 {
@@ -139,16 +151,3 @@ O código do status deve ser **500**, retornar um json conforme a [RFC7807](http
     "instance": "/api-endpoint",
 }
 ```
-
-## Diferenciais :pushpin:
-
- * Implementar testes automatizados.
- * Implementar em GoLang ou Lua com framework como openresty.
- * Documentar com OpenAPI, PostmanAPI, Swagger ou similar.
- * Utilizar commits semânticos e seguir algum git-flow.
- * Vtilizar versionamento semantico.
- * _Outros critérios que são segredos!_ :shushing_face:
-
------------------------------
-
-:raising_hand_man: **Boa sorte!**

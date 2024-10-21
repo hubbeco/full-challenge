@@ -1,0 +1,32 @@
+server:
+  port: 80
+
+cors:
+  originsPatterns: http://example
+
+spring:
+  application:
+    name: ApiTest
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: example@gmail.com
+    password: password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+
+recaptcha:
+  key: secret key
+  url: https://www.google.com/recaptcha/api/siteverify
+
+mail:
+  secure: false
+
+text:
+  mail:
+    title: Contact form
+    body: "contact from {name}, using mail: {email}, about: {comment}"
+    html: "contact from {name}, using mail: {email}, about: {comment}"
