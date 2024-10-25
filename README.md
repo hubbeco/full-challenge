@@ -34,3 +34,24 @@ Este desafio consiste em desenvolver um formulário que permite aos usuários en
 ### Observação
 O RECAPTCHA funciona somente em localhost, pois a chave do RECAPTCHA está configurada para operar apenas nesse domínio.
 
+## Documentação da API
+
+Para acessar a documentação da API, utilize o seguinte endpoint do Swagger:
+
+localhost:8080/swagger-ui.html
+
+### Body para Teste
+
+Para testar a API, utilize o seguinte corpo na requisição:
+
+```json
+{
+    "recaptchaToken": "valid_token",
+    "comment": "Este é meu comentário",
+    "name": "Meu Nome Aqui",
+    "mail": "meuemail@email.com"
+}
+```
+### Importante
+
+Para o funcionamento correto da API, é necessário um token válido de RECAPTCHA.
