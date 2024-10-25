@@ -1,35 +1,57 @@
-# Recruitment challenges
+# Backend Challenge
 
-De forma divertida e inteligente, desafios de código ajudam a entender e nivelar o conhecimento de cada candidato.
-Os desafios são destinados a todos os níveis de carreira e por isso não é esperado que todos consigam realizá-los
-por completo. Contudo, a forma como o candidato resolve o problema apresentado, vai ajudar nossa equipe a entender
-sua forma de pensar e expressar ideias com código.
+Este desafio consiste em desenvolver um formulário que permite aos usuários enviar mensagens para a empresa. Além disso, uma cópia do email enviado será enviada também ao remetente, garantindo que ele tenha um registro da comunicação.
 
-A Hubbe acredita em uma cultura de feedbacks construtivos e, portanto, tentaremos oferecer uma atenção especial
-a todos que submeterem o desafio, passando para o candidato quais são os pontos positivos do seu teste e os pontos a melhorar.
+### Funcionalidades Principais:
+- **Envio de Email:** O usuário pode preencher o formulário e enviar um email diretamente para a empresa.
+- **Cópia ao Remetente:** O cliente receberá uma cópia do email enviado, proporcionando maior transparência e confirmação.
+- **Segurança com RECAPTCHA:** O formulário inclui a verificação RECAPTCHA para garantir que as mensagens sejam enviadas por usuários reais, prevenindo spam e abusos.
 
-Se você deseja trabalhar conosco, tente realizar o desafio.
+## Tecnologias Utilizadas
 
-Vamos tentar?! :)
+- **Backend**: Java com Spring Boot
+- **Frontend**: React com JavaScript, HTML e CSS
+- **Outras Tecnologias**: Docker
 
-Escolha abaixo o desafio que melhor se adequa aos objetivos da vaga em questão.
-Se veio somente pela diversão, sinta-se a vontade para fazer qualquer desafio.  
+## Passo a Passo para Rodar o Projeto
 
-#### Frontend challenges
-* [frontend-leadfinder](frontend)
-* [em breve] [frontend-checkout](frontend-checkout)
-    
-#### Backend challenges
-* [backend](backend)
-  
-#### Data science and Machine learning challenges
-* [data-science-mining](data-science-mining)
-* [em breve] [data-engineering](data-engineering)
-* [data-science](data-science)
-* [em breve] [machine-learning-engineering](machine-learning-engineering)
+1. **Clonar o Repositório**
 
-#### Marketing challenges      
-* [marketing-social-media](marketing)
+   Execute o seguinte comando para clonar o repositório e navegar até a pasta do projeto:
 
-#### Design, UI/UX challenges      
-* [em breve] [design](design)
+   ```bash
+   git clone https://github.com/Vmp3/BackendChallenge
+   cd BackendChallenge/challenge
+   ```
+
+2. **Rodar o Projeto**
+
+   Utilize o Docker para construir e iniciar o projeto com o seguinte comando:
+
+   ```bash
+   docker-compose up --build
+   ```
+### Observação
+O RECAPTCHA funciona somente em localhost, pois a chave do RECAPTCHA está configurada para operar apenas nesse domínio.
+
+## Documentação da API
+
+Para acessar a documentação da API, utilize o seguinte endpoint do Swagger:
+
+localhost:8080/swagger-ui.html
+
+### Body para Teste
+
+Para testar a API, utilize o seguinte corpo na requisição:
+
+```json
+{
+    "recaptchaToken": "valid_token",
+    "comment": "Este é meu comentário",
+    "name": "Meu Nome Aqui",
+    "mail": "meuemail@email.com"
+}
+```
+### Importante
+
+Para o funcionamento correto da API, é necessário um token válido de RECAPTCHA.

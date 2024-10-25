@@ -1,0 +1,35 @@
+FROM maven:3.8.5-openjdk-17 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+
+RUN mvn dependency:go-offline
+
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
+
+EXPOSE 8080
+
+# Definindo variáveis de ambiente
+ENV SPRING_APPLICATION_NAME=challenge
+ENV SERVER_PORT=8080
+ENV SPRING_MAIL_HOST=smtp.gmail.com
+ENV SPRING_MAIL_PORT=587
+ENV SPRING_MAIL_USERNAME=vicentepereira9486@gmail.com
+ENV SPRING_MAIL_PASSWORD="ffrw tkxz kkvg doid"
+ENV SPRING_TEXT_MAIL_TITLE="Backend Challenge"
+ENV SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+ENV SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=true
+ENV RECAPTCHA_SECRET=6LfEg2sqAAAAAAUzKeaXKuI-NmB_UrI60iJFe3-3
+ENV RECAPTCHA_URL=https://www.google.com/recaptcha/api/siteverify
+ENV COMPANY_EMAIL=vicentemenezes777@gmail.com
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
