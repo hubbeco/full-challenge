@@ -5,6 +5,9 @@ import com.challenge.challenge.model.ContactForm;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.challenge.challenge.exception.BadRequestException;
+import com.challenge.challenge.exception.UnauthorizedErrorException;
+import com.challenge.challenge.exception.InternalServerErrorException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,23 +24,46 @@ public class EmailController {
     }
 
     @PostMapping("/contact")
-    public ResponseEntity<?> sendEmail(@RequestBody ContactForm form) {
+    public ResponseEntity<?> sendEmail(@RequestBody Map<String, Object> payload) {
         try {
-            emailService.sendEmail(form);
+            ContactForm form = new ContactForm();
+            form.setName((String) payload.get("name"));
+            form.setMail((String) payload.get("mail"));
+            form.setComment((String) payload.get("comment"));
+            String recaptchaToken = (String) payload.get("recaptchaToken");
+
+            emailService.sendEmail(form, recaptchaToken);
             return ResponseEntity.status(HttpStatus.CREATED).build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(createErrorResponse("BadRequestError", e.getMessage(), "/api/contact"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(createErrorResponse("InternalServerError", "Some generic error name.", "/api/contact"));
+        } catch (BadRequestException e) {
+            return createErrorResponse(HttpStatus.BAD_REQUEST, "BadRequestError", e.getMessage(), "/api/contact");
+        } catch (UnauthorizedErrorException e) {
+            return createErrorResponse(HttpStatus.UNAUTHORIZED, "UnauthorizedError", e.getMessage(), "/api/contact");
+        } catch (InternalServerErrorException e) {
+            return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "InternalServerError", e.getMessage(), "/api/contact");
         }
     }
 
-    private Map<String, String> createErrorResponse(String title, String detail, String instance) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("type", "about:blank");
-        errorResponse.put("title", title);
-        errorResponse.put("detail", detail);
-        errorResponse.put("instance", instance);
-        return errorResponse;
+    private ResponseEntity<Map<String, Object>> createErrorResponse(HttpStatus status, String title, String detail, String instance) {
+        Map<String, Object> errorAttributes = new HashMap<>();
+        errorAttributes.put("type", "about:blank");
+        errorAttributes.put("title", title);
+        errorAttributes.put("detail", detail);
+        errorAttributes.put("instance", instance);
+        return new ResponseEntity<>(errorAttributes, status);
+    }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<Map<String, Object>> handleBadRequest(BadRequestException ex) {
+        return createErrorResponse(HttpStatus.BAD_REQUEST, "BadRequestError", ex.getMessage(), "/api/contact");
+    }
+
+    @ExceptionHandler(UnauthorizedErrorException.class)
+    public ResponseEntity<Map<String, Object>> handleUnauthorizedError(UnauthorizedErrorException ex) {
+        return createErrorResponse(HttpStatus.UNAUTHORIZED, "UnauthorizedError", ex.getMessage(), "/api/contact");
+    }
+
+    @ExceptionHandler(InternalServerErrorException.class)
+    public ResponseEntity<Map<String, Object>> handleInternalServerError(InternalServerErrorException ex) {
+        return createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "InternalServerError", ex.getMessage(), "/api/contact");
     }
 }
