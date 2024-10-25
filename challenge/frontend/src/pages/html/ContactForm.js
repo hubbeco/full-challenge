@@ -107,8 +107,7 @@ function ContactForm() {
         required
       />
       <RecaptchaField
-        // sitekey="6LfEg2sqAAAAAN-A_fHP5Jta7JMqvEqarYkyBpFk" // chave real
-        sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" // chave teste
+        sitekey="6LfEg2sqAAAAAN-A_fHP5Jta7JMqvEqarYkyBpFk" // chave real
         onChange={handleRecaptchaChange}
         recaptchaRef={recaptchaRef} 
       />
