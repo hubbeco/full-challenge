@@ -1,154 +1,36 @@
-# Backend challenge :clipboard:
+# Backend Challenge
 
-> Candidato a contratação deve fazer um fork do repositório e fazer sua implementação de micro serviço.
+Este desafio consiste em desenvolver um formulário que permite aos usuários enviar mensagens para a empresa. Além disso, uma cópia do email enviado será enviada também ao remetente, garantindo que ele tenha um registro da comunicação.
 
-## Requisitos da API :paperclip:
+### Funcionalidades Principais:
+- **Envio de Email:** O usuário pode preencher o formulário e enviar um email diretamente para a empresa.
+- **Cópia ao Remetente:** O cliente receberá uma cópia do email enviado, proporcionando maior transparência e confirmação.
+- **Segurança com RECAPTCHA:** O formulário inclui a verificação RECAPTCHA para garantir que as mensagens sejam enviadas por usuários reais, prevenindo spam e abusos.
 
-Implemente uma microserviço para um formulário de contato que replique o email para o usuário e a empresa que esteja utilizando o serviço:
+## Tecnologias Utilizadas
 
- * Deve possuir um `Procfile` (heroku) ou `Dockerfile` para executar em produção.
- * Re-escreva a `README.md` com instruções de uso para o projeto.
- * Ofereça suporte para [ReCaptcha v2](https://developers.google.com/recaptcha/docs/display) e/ou [HCaptcha](https://www.hcaptcha.com/).
+- **Backend**: Java com Spring Boot
+- **Frontend**: React com JavaScript, HTML e CSS
+- **Outras Tecnologias**: Docker
 
-### Variaveis de ambiente
+## Passo a Passo para Rodar o Projeto
 
-```env
-PORT = <80>
-ORIGINS = <https://example.com>
-RECAPTCHA_KEY = <secret key api recaptcha>
-RECAPTCHA_URL = <https://www.google.com/recaptcha/api/siteverify>
-MAIL_HOST = <mail.example.com>
-MAIL_PORT = <586>
-MAIL_SECURE = <false>
-MAIL_AUTH_USER = <staff@example.com>
-MAIL_AUTH_PASS = <12435678>
-TEXT_MAIL_TITLE = <Contact form>
-TEXT_MAIL_BODY = <contact from {name}, using mail: {email}, about: {comment}>
-TEXT_MAIL_HTML = <contact from {name}, using mail: {email}, about: {comment}>
-```
+1. **Clonar o Repositório**
 
-### Funcionamento
+   Execute o seguinte comando para clonar o repositório e navegar até a pasta do projeto:
 
-#### Envio correto:
+   ```bash
+   git clone https://github.com/Vmp3/BackendChallenge
+   cd BackendChallenge/challenge
+   ```
 
- * request
+2. **Rodar o Projeto**
 
-```JSON
-{
-    "g-recaptcha-response": "my correct captcha",
-    "comment": "my comment",
-    "name": "my name",
-    "mail": "my.name@example.com"
-}
-```
+   Utilize o Docker para construir e iniciar o projeto com o seguinte comando:
 
- * response:
+   ```bash
+   docker-compose up --build
+   ```
+### Observação
+O RECAPTCHA funciona somente em localhost, pois a chave do RECAPTCHA está configurada para operar apenas nesse domínio.
 
-O código do status deve ser **201** para envio correto. Não é necessário responder qualquer coisa em body.
-
-#### Erro de captcha:
-
- * request
-
-```JSON
-{
-    "g-recaptcha-response": "my wrong captcha",
-    "comment": "my comment",
-    "name": "my name",
-    "mail": "my.name@example.com"
-}
-```
-
- * response
-
-O código do status deve ser **401**, retornar um json conforme a [RFC7807](https://datatracker.ietf.org/doc/html/rfc7807).
-<!-- diferencial rfc9457, mais atualizada, porém mais extensa a explicação. -->
-
-```json
-{
-    "type": "about:blank",
-    "title": "UnauthorizedError",
-    "detail": "The captcha is incorrect!",
-    "instance": "/api-endpoint",
-}
-```
-
-#### Erro de usuário:
-
- * request
-
-```JSON
-{
-    "g-recaptcha-response": "my correct captcha",
-    "comment": "my comment",
-    "name": "my name",
-    "mail": "my.name@"
-}
-```
-
- * response
-
-O código do status deve ser **400**, retornar um json conforme a [RFC7807](https://datatracker.ietf.org/doc/html/rfc7807).
-
-```json
-{
-    "type": "about:blank",
-    "title": "BadRequestError",
-    "detail": "The email is invalid",
-    "instance": "/api-endpoint",
-}
-```
-
---- 
-
- * request
-
-```JSON
-{
-    "g-recaptcha-response": "my correct captcha",
-    "comment": "my comment",
-    "name": "",
-    "mail": "my.name@example.com"
-}
-```
-
- * response
-
-O código do status deve ser **400**, retornar um json conforme a [RFC7807](https://datatracker.ietf.org/doc/html/rfc7807).
-
-```json
-{
-    "type": "about:blank",
-    "title": "BadRequestError",
-    "detail": "The name is empty",
-    "instance": "/api-endpoint",
-}
-```
-
-#### Erro do servidor:
-
- * response
-
-O código do status deve ser **500**, retornar um json conforme a [RFC7807](https://datatracker.ietf.org/doc/html/rfc7807).
-
-```json
-{
-    "type": "about:blank",
-    "title": "InternalServerError",
-    "detail": "Some generic error name.",
-    "instance": "/api-endpoint",
-}
-```
-
-## Diferenciais :pushpin:
-
- * Implementar testes automatizados.
- * Implementar em GoLang ou Lua com framework como openresty.
- * Documentar com OpenAPI, PostmanAPI, Swagger ou similar.
- * Utilizar commits semânticos e seguir algum git-flow.
- * Vtilizar versionamento semantico.
- * _Outros critérios que são segredos!_ :shushing_face:
-
------------------------------
-
-:raising_hand_man: **Boa sorte!**
