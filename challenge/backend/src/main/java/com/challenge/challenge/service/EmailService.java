@@ -106,7 +106,16 @@ public class EmailService {
     }
 
     public boolean isValidForm(ContactForm form) {
-        return isValidEmail(form.getMail()) && isValidComment(form.getComment());
+        if (!isValidName(form.getName())) {
+            throw new BadRequestException("The name is empty");
+        }
+        if (!isValidEmail(form.getMail())) {
+            throw new BadRequestException("The email is invalid");
+        }
+        if (!isValidComment(form.getComment())) {
+            throw new BadRequestException("The comment is too short");
+        }
+        return true;
     }
 
     public boolean isValidEmail(String email) {
@@ -123,6 +132,6 @@ public class EmailService {
     }
 
     public boolean isValidComment(String comment) {
-        return comment != null && !comment.trim().isEmpty();
+        return comment != null && comment.trim().length() >= 15;
     }
 }

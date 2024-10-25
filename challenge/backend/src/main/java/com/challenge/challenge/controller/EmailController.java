@@ -35,7 +35,7 @@ public class EmailController {
             emailService.sendEmail(form, recaptchaToken);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (BadRequestException e) {
-            return createErrorResponse(HttpStatus.BAD_REQUEST, "BadRequestError", e.getMessage(), "/api/contact");
+            return createErrorResponse(HttpStatus.BAD_REQUEST, "BadRequestError", e.getMessage(), "/api-endpoint");
         } catch (UnauthorizedErrorException e) {
             return createErrorResponse(HttpStatus.UNAUTHORIZED, "UnauthorizedError", e.getMessage(), "/api/contact");
         } catch (InternalServerErrorException e) {
